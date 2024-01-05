@@ -1,7 +1,7 @@
 '''
 Created on Feb 10, 2014
 
-@author: marko
+@author: marko   
 '''
 from __future__ import absolute_import
 import os
@@ -162,8 +162,7 @@ class SerialZoneSeeker(XBMCSubtitlesAdapter):
     default_settings = {}
     movie_search = False
     tvshow_search = True
-
-
+    
 try:
     from .Elsubtitle import elsubtitle
 except ImportError as e:
@@ -228,8 +227,7 @@ class ElsubtitleSeeker(XBMCSubtitlesAdapter):
                                             "tr",
                                             "uk",
                                             "vi"]
-    default_settings = {}
-
+    default_settings = {}   
 
 try:
     from .Indexsubtitle import indexsubtitle
@@ -295,8 +293,7 @@ class IndexsubtitleSeeker(XBMCSubtitlesAdapter):
                                             "tr",
                                             "uk",
                                             "vi"]
-    default_settings = {}
-
+    default_settings = {}    
 
 try:
     from .Moviesubtitles import moviesubtitles
@@ -364,9 +361,8 @@ class MoviesubtitlesSeeker(XBMCSubtitlesAdapter):
                                             "vi"]
     default_settings = {}
 
-
 try:
-    from .Moviesubtitles2 import moviesubtitles2
+    from .Moviesubtitles2  import moviesubtitles2 
 except ImportError as e:
     moviesubtitles2 = e
 
@@ -430,14 +426,12 @@ class Moviesubtitles2Seeker(XBMCSubtitlesAdapter):
                                             "uk",
                                             "vi"]
     default_settings = {}
-
-
+    
 try:
     from .MySubs import mysubs
 except ImportError as e:
     mysubs = e
-
-
+    
 class MySubsSeeker(XBMCSubtitlesAdapter):
     id = 'mysubs'
     module = mysubs
@@ -578,6 +572,71 @@ class OpenSubtitlesSeeker(XBMCSubtitlesAdapter):
                 if e.errcode == 503:
                     time.sleep(0.5)
 
+try:
+    from .OpenSubtitles2 import opensubtitles2
+except ImportError as e:
+    opensubtitles2 = e
+
+
+class OpenSubtitles2Seeker(XBMCSubtitlesAdapter):
+    module = opensubtitles2
+    if isinstance(module, Exception):
+        error, module = module, None
+    id = 'opensubtitles.com'
+    provider_name = 'OpenSubtitles.com'
+    supported_langs = ["en",
+                                            "fr",
+                                            "hu",
+                                            "cs",
+                                            "pl",
+                                            "sk",
+                                            "pt",
+                                            "pt-br",
+                                            "es",
+                                            "el",
+                                            "ar",
+                                            'sq',
+                                            "hy",
+                                            "ay",
+                                            "bs",
+                                            "bg",
+                                            "ca",
+                                            "zh",
+                                            "hr",
+                                            "da",
+                                            "nl",
+                                            "eo",
+                                            "et",
+                                            "fi",
+                                            "gl",
+                                            "ka",
+                                            "de",
+                                            "he",
+                                            "hi",
+                                            "is",
+                                            "id",
+                                            "it",
+                                            "ja",
+                                            "kk",
+                                            "ko",
+                                            "lv",
+                                            "lt",
+                                            "lb",
+                                            "mk",
+                                            "ms",
+                                            "no",
+                                            "oc",
+                                            "fa",
+                                            "ro",
+                                            "ru",
+                                            "sr",
+                                            "sl",
+                                            "sv",
+                                            "th",
+                                            "tr",
+                                            "uk",
+                                            "vi"]
+    default_settings = {}
 
 try:
     from .Podnapisi import podnapisi
@@ -714,12 +773,10 @@ class SubsceneSeeker(XBMCSubtitlesAdapter):
                                             "vi"]
     default_settings = {}
 
-
 try:
     from .Subdl import subdl
 except ImportError as e:
     subdl = e
-
 
 class SubdlSeeker(XBMCSubtitlesAdapter):
     module = subdl
@@ -783,12 +840,10 @@ class SubdlSeeker(XBMCSubtitlesAdapter):
     movie_search = True
     tvshow_search = True
 
-
 try:
     from .Subsyts import subsyts
 except ImportError as e:
     subsyts = e
-
 
 class SubsytsSeeker(XBMCSubtitlesAdapter):
     module = subsyts
@@ -852,12 +907,10 @@ class SubsytsSeeker(XBMCSubtitlesAdapter):
     movie_search = True
     tvshow_search = True
 
-
 try:
     from .Subtitlecat import subtitlecat
 except ImportError as e:
     subtitlecat = e
-
 
 class SubtitlecatSeeker(XBMCSubtitlesAdapter):
     module = subtitlecat
@@ -921,7 +974,6 @@ class SubtitlecatSeeker(XBMCSubtitlesAdapter):
     movie_search = True
     tvshow_search = True
 
-
 try:
     from .SubtitlesGR import subtitlesgr
 except ImportError as e:
@@ -939,13 +991,11 @@ class SubtitlesGRSeeker(XBMCSubtitlesAdapter):
     movie_search = True
     tvshow_search = True
 
-
 try:
     from .Subtitlesmora import subtitlesmora
 except ImportError as e:
-    subtitlesmora = e
-
-
+    subtitlesmora = e 
+    
 class SubtitlesmoraSeeker(XBMCSubtitlesAdapter):
     module = subtitlesmora
     if isinstance(module, Exception):
@@ -955,8 +1005,7 @@ class SubtitlesmoraSeeker(XBMCSubtitlesAdapter):
     supported_langs = ['ar']
     default_settings = {}
     movie_search = True
-    tvshow_search = True
-
+    tvshow_search = True  
 
 try:
     from .Subtitlist import subtitlist
@@ -1023,14 +1072,14 @@ class SubtitlistSeeker(XBMCSubtitlesAdapter):
                                             "uk",
                                             "vi"]
     default_settings = {}
-
-
+       
+    
 try:
     from .Itasa import itasa
 except ImportError as e:
     itasa = e
 
-
+       
 class ItasaSeeker(XBMCSubtitlesAdapter):
     module = itasa
     if isinstance(module, Exception):
@@ -1059,4 +1108,6 @@ class TitloviSeeker(XBMCSubtitlesAdapter):
     supported_langs = ['bs', 'hr', 'en', 'mk', 'sr', 'sl']
     default_settings = {}
     movie_search = True
-    tvshow_search = True
+    tvshow_search = True  
+  
+    

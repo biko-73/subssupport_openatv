@@ -18,6 +18,7 @@ import urllib3
 import requests, re
 import requests , json, re,random,string,time,warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from .OpenSubtitles2Utilities import get_language_info
 from six.moves import html_parser
 warnings.simplefilter('ignore',InsecureRequestWarning)
 import os, os.path
@@ -46,16 +47,16 @@ HDR= {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:109.0) Gecko/20100101 Firef
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
       'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
       'Content-Type': 'text/html; charset=UTF-8',
-      'Host': 'archive.org',
-      'Referer': 'https://archive.org',
+      'Host': 'www.opensubtitles.com',
+      'Referer': 'https://www.opensubtitles.com',
       'Upgrade-Insecure-Requests': '1',
       'Connection': 'keep-alive',
       'Accept-Encoding':'gzip, deflate'}#, deflate'}
       
 s = requests.Session()   
 
-main_url = "https://archive.org"
-debug_pretext = "archive.org"
+main_url = "https://www.opensubtitles.com"
+debug_pretext = "opensubtitles.com"
 
 
 def get_url(url, referer=None):
@@ -97,8 +98,14 @@ def get_rating(downloads):
 
 
 def search_subtitles(file_original_path, title, tvshow, year, season, episode, set_temp, rar, lang1, lang2, lang3, stack): #standard input
+    languagefound = lang1
+    language_info = get_language_info(languagefound)
+    language_info1 = language_info['name']
+    language_info2 = language_info['2et']
+    language_info3 = language_info['3et']
+
     subtitles_list = []
-    msg = ""
+    msg = ""   
 
     if len(tvshow) == 0 and year: # Movie
         searchstring = "%s (%s)" % (title, year)
@@ -109,16 +116,20 @@ def search_subtitles(file_original_path, title, tvshow, year, season, episode, s
     else:
         searchstring = title
     log(__name__, "%s Search string = %s" % (debug_pretext, searchstring))
-    get_subtitles_list(title, searchstring, "ar", "Arabic", subtitles_list)
+    get_subtitles_list(searchstring, language_info2, language_info1, subtitles_list)
     return subtitles_list, "", msg #standard output
-
 
 def download_subtitles(subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, session_id): #standard input
     language = subtitles_list[pos]["language_name"]
     id = subtitles_list[pos]["id"]
     #id = re.compile('(.+?.+?)/').findall(id)[-1]
-    downloadlink = 'https://archive.org/download/mora25r/%s' % (id)
-    #id = 'http://www.findsubtitles.eu/getp.php?id=%s' % (id)
+    link = '%s%s' % (main_url, id)
+    #print(link)
+    content = get_url(link,referer=main_url)
+    #print(content)   
+    regx="https:(.+?).srt"
+    try:downloadlink='https:'+re.findall(regx,content, re.M|re.I)[0]+'.srt'
+    except:pass
     print(downloadlink)   
     if downloadlink:
         log(__name__ , "%s Downloadlink: %s " % (debug_pretext, downloadlink))
@@ -136,7 +147,7 @@ def download_subtitles(subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, s
         log(__name__ , "%s Fetching subtitles using url with referer header '%s' and post parameters '%s'" % (debug_pretext, downloadlink, postparams))
         #response = my_urlopener.open(downloadlink, postparams)
         response = s.get(downloadlink,data=postparams,headers=HDR,verify=False,allow_redirects=True) 
-        print(response.content)
+        #print(response.content)
         local_tmp_file = zip_subs
         try:
             log(__name__ , "%s Saving subtitles to '%s'" % (debug_pretext, local_tmp_file))
@@ -172,40 +183,53 @@ def download_subtitles(subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, s
         log(__name__ , "%s Subtitles saved to '%s'" % (debug_pretext, local_tmp_file))
         return packed, language, subs_file  # standard output
 
-def get_subtitles_list(title, searchstring, languageshort, languagelong, subtitles_list):
-    url = '%s/download/mora25r' % (main_url) 
-    title = title.strip()
-    #url = 'https://archive.org/download/iptvworld-1/A/'  quote_plus(title)
-    d = quote_plus(title)
-    d = d.replace('+', '.')
-    print('url', url)
-    print('d', d)
-    print('searchstring', searchstring)
+
+def get_subtitles_list(searchstring, languageshort, languagelong, subtitles_list):
+    search_string = searchstring.lower().replace(" ", "-").replace(":", "-")
+    lang = languageshort
+    print('search_string',search_string)
+    url = '%s/fr/%s/search-all/q-%s/hearing_impaired-include/machine_translated-/trusted_sources-' % (main_url, lang, search_string)
+    print('url',url)
+
     try:
         log(__name__, "%s Getting url: %s" % (debug_pretext, url))
-        content = s.get(url,headers=HDR,verify=False,allow_redirects=True).text
-        #print(content)  
+        content = get_url(url,referer=main_url)
+        content = content.replace('amp;', '')
+        #print(content)        
     except:
         pass
         log(__name__, "%s Failed to get url:%s" % (debug_pretext, url))
         return
     try:
         log( __name__ ,"%s Getting '%s' subs ..." % (debug_pretext, languageshort))
-        subtitles = re.compile('(<td><a href.+?">'+d+'.+?</a></td>)').findall(content)
-        #print(subtitles)                        
+        subtitles = re.compile('(<a href="/fr/subtitles/.+?</a><div.+?<i title="Direct download)').findall(content)
+        ##print('subtitles',subtitles)
     except:
         log( __name__ ,"%s Failed to get subtitles" % (debug_pretext))
         return
     for subtitle in subtitles:
         try:
-            filename = re.compile('<td><a href=".+?">(.+?)</a></td>').findall(subtitle)[0]
-            filename = filename.strip().replace('.srt', '')
-            #print(filename) 
-            id = re.compile('href="(.+?)"').findall(subtitle)[0]
-            #print(id) 
-            if not (filename == 'Εργαστήρι Υποτίτλων' or filename == 'subs4series'):
+            filename = re.compile('<a href=".+?">(.+?)</a><div').findall(subtitle)[0]
+            #filename = filename.split("subtitles for")[-1]
+            filename = filename.strip()
+            #print(filename)
+            id = re.compile('<a download.+?href="(.+?)"><i').findall(subtitle)[0]
+            #print(id)
+            try:
+                downloads = re.compile('<a title="votes".+?href.+?>.+?</a>.+?href.+?>(.+?)</a>').findall(subtitle)[0]
+                downloads = re.sub("\D", "", downloads)
+                #print(downloads)
+            except:
+                pass
+            try:
+                rating = get_rating(downloads)
+                #print(rating)
+            except:
+                rating = 0
+                pass
+            if not downloads == 0:
                 log( __name__ ,"%s Subtitles found: %s (id = %s)" % (debug_pretext, filename, id))
-                subtitles_list.append({'no_files': 1, 'filename': filename, 'sync': False, 'id' : id, 'language_flag': 'flags/' + languageshort + '.gif', 'language_name': languagelong})
+                subtitles_list.append({'rating': str(rating), 'no_files': 1, 'filename': filename, 'sync': False, 'id' : id, 'language_flag': 'flags/' + languageshort + '.gif', 'language_name': languagelong})
         except:
             pass
     return

@@ -18,14 +18,19 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
+
+from Plugins.Plugin import PluginDescriptor
 from datetime import datetime
 import json
 import os
 import re
+import sys
 from threading import Thread
+import traceback
 from twisted.internet.defer import Deferred
 from twisted.web import client
-
+from enigma import eListboxPythonMultiContent, eListbox, gFont, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, loadPNG, RT_WRAP, eConsoleAppContainer, eServiceCenter, eServiceReference, getDesktop, loadPic, loadJPG, RT_VALIGN_CENTER, gPixmapPtr, ePicLoad, eTimer
+from ServiceReference import ServiceReference
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.GUIComponent import GUIComponent
@@ -50,7 +55,7 @@ from Screens.LocationBox import LocationBox
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Tools import Notifications
-from Tools.Directories import SCOPE_CURRENT_SKIN, SCOPE_SKIN, SCOPE_PLUGINS, resolveFilename, \
+from Tools.Directories import SCOPE_CURRENT_SKIN, SCOPE_SKIN, SCOPE_PLUGINS, resolveFilename, pathExists, \
     fileExists
 from Tools.ISO639 import LanguageCodes
 from Tools.LoadPixmap import LoadPixmap
@@ -76,6 +81,7 @@ from .utils import toString, SimpleLogger, toUnicode
 from . import _, __author__, __version__, __email__
 
 import six
+from six.moves.queue import Queue
 from six.moves import range
 from six.moves import urllib
 from six.moves.urllib.parse import quote
@@ -93,7 +99,6 @@ except ImportError:
 
 if six.PY3:
     long = int
-
 
 # localization function
 
@@ -572,7 +577,7 @@ class SubsSupportEmbedded(object):
     def getCurrentServiceSubtitle(self):
         service = self.session.nav.getCurrentService()
         return service and service.subtitle()
-
+        
     def __serviceChanged(self):
         if self.selected_subtitle:
             self.selected_subtitle = None
@@ -1120,6 +1125,7 @@ class SubsSupport(SubsSupportEmbedded):
 
 
 ############ Methods triggered by videoEvents when SubsSupport is subclass of Screen ################
+
 
     def __serviceStarted(self):
         print('[SubsSupport] Service Started')
@@ -2309,7 +2315,7 @@ class SubFileList(FileList):
         directories = []
         files = []
 
-        if directory is None and self.showMountpoints:  # present available mountpoints
+        if directory is None and self.showMountpoints: # present available mountpoints
             for p in harddiskmanager.getMountedPartitions():
                 path = os.path.join(p.mountpoint, "")
                 if path not in self.inhibitMounts and not self.inParentDirs(path, self.inhibitDirs):
@@ -3153,7 +3159,7 @@ class Suggestions(object):
 class OpenSubtitlesSuggestions(Suggestions):
     def _getSuggestions(self, queryString):
         query = "http://www.opensubtitles.org/libs/suggest.php?format=json2&SubLanguageID=null&MovieName=" + quote(queryString)
-        return client.getPage(six.ensure_binary(query), timeout=6)  # TODO deprecated
+        return client.getPage(six.ensure_binary(query), timeout=6)
 
     def _processResult(self, data):
         return json.loads(data)['result']
@@ -3804,7 +3810,6 @@ class SubsSearchContextMenu(Screen):
     def getSelection(self):
         return self.options[self["context_menu"].index][1]
 
-
 class SubsSearch(Screen):
     if isFullHD():
         skin = """
@@ -3930,7 +3935,7 @@ class SubsSearch(Screen):
         self.searchExpression = searchTitles[0]
         self.searchTitles = searchTitles
         self.filepath = filepath
-        if self.filepath:
+        if self.filepath:                                         
             self.filepath = urllib.parse.unquote(self.filepath)
         self.isLocalFilepath = filepath and os.path.isfile(filepath) or False
         self.searchTitle = searchSettings.title
@@ -3951,12 +3956,12 @@ class SubsSearch(Screen):
         self["header_provider"] = StaticText(_("Provider"))
         self["header_sync"] = StaticText(_("S"))
         self["subtitles"] = List([])
-        self["key_info_img"] = Boolean()
+        self["key_info_img"] = Boolean() 
         self["key_menu_img"] = Boolean()
         self["key_red"] = StaticText(_("Update"))
         self["key_green"] = StaticText(_("Search"))
-        self["key_yellow"] = StaticText(_("History"))
-        self["key_blue"] = StaticText(_("Settings"))
+        self["key_yellow"] = StaticText(_("History"))    
+        self["key_blue"] = StaticText(_("Settings"))      
         self["okCancelActions"] = ActionMap(["OkCancelActions"],
         {
             "ok": self.keyOk,
@@ -4041,16 +4046,16 @@ class SubsSearch(Screen):
         self.onClose.append(self.message.exit)
         self.onClose.append(self.searchParamsHelper.resetSearchParams)
         self.onClose.append(self.stopSearchSubs)
-        self.onClose.append(self.closeSeekers)
-
-    def eventinfo(self):
-        tmdb_file = resolveFilename(SCOPE_PLUGINS, "Extensions/tmdb")
+        self.onClose.append(self.closeSeekers) 
+        
+    def eventinfo(self):         
+        tmdb_file=resolveFilename(SCOPE_PLUGINS, "Extensions/tmdb")
         if os.path.exists(tmdb_file):
                from Plugins.Extensions.tmdb import tmdb
                reload_module(tmdb)
                s = self.session.nav.getCurrentService()
                info = s.info()
-               event = info.getEvent(0)  # 0 = now, 1 = next
+               event = info.getEvent(0) # 0 = now, 1 = next
                name = event and event.getEventName() or ''
                self.session.open(tmdb.tmdbScreen, name, 2)
         else:
@@ -4145,7 +4150,7 @@ class SubsSearch(Screen):
             if self["subtitles"].count() > 0:
                 self["key_menu_img"].boolean = True
                 self["key_info_img"].boolean = True
-
+                
     def updateActionMaps(self):
         if self.__searching:
             self["okCancelActions"].setEnabled(False)

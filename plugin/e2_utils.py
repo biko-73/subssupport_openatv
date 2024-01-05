@@ -20,8 +20,9 @@ from __future__ import print_function
 from . import _
 import os
 import shutil
-from twisted.web.client import downloadPage  # TODO deprecated !!
+from twisted.web.client import downloadPage
 import xml.etree.cElementTree
+from enigma import eTimer, ePicLoad, gPixmapPtr, getPrevAsciiCode
 from Tools.Directories import fileExists, pathExists
 from Components.Label import Label
 from Components.ConfigList import ConfigList
@@ -32,6 +33,8 @@ from Components.ConfigList import ConfigList
 from Components.Console import Console
 from Components.Language import language
 from Components.Pixmap import Pixmap
+from Components.Input import Input
+from Screens.InputBox import InputBox
 from Components.Sources.List import List
 from Components.ConfigList import ConfigListScreen
 from Components.config import ConfigText, ConfigSubsection, ConfigDirectory, \
@@ -42,15 +45,15 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import fileExists, SCOPE_SKIN, resolveFilename
 from Components.ActionMap import NumberActionMap, ActionMap, HelpableActionMap
 from Components.config import ConfigText, KEY_0, KEY_DELETE, KEY_BACKSPACE, config
-from enigma import addFont, eEnv, ePicLoad, getDesktop, eListboxPythonMultiContent, eListbox, eTimer, gFont, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_WRAP, loadPNG
+from enigma import getDesktop, eListboxPythonMultiContent, eListbox, eTimer, gFont, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_WRAP, loadPNG
 
 from .compat import LanguageEntryComponent, eConnectCallback
+from enigma import addFont, ePicLoad, eEnv, getDesktop
 from .utils import toString
-
 
 import six
 
-
+          
 def getDesktopSize():
     s = getDesktop(0).size()
     return (s.width(), s.height())
@@ -264,7 +267,7 @@ class CaptchaDialog(VirtualKeyBoard):
         self['key_green'] = StaticText(_('Save'))
         self["text"] = self['text']
         self["myActionMap"] = NumberActionMap(["WizardActions", "InputBoxActions", "ColorActions"],
-        	{
+        	{           		
                         "green": self.save
            	}, -1)
         self.Scale = AVSwitch().getFramebufferScale()
@@ -291,7 +294,7 @@ class CaptchaDialog(VirtualKeyBoard):
     def __onClose(self):
         del self.picLoad_conn
         del self.picLoad
-
+                
     def save(self):
         Password = self['text'].getText()
         code = str(Password)
@@ -304,8 +307,7 @@ class CaptchaDialog(VirtualKeyBoard):
                 file = open(Path, 'w')
                 file.write(Password.replace(' ', ''))
                 file.close()
-
-
+      
 class DelayMessageBox(MessageBox):
     def __init__(self, session, seconds, message):
         MessageBox.__init__(self, session, message, type=MessageBox.TYPE_INFO, timeout=seconds, close_on_any_key=False, enable_input=False)

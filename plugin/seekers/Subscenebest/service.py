@@ -62,6 +62,8 @@ def geturl(url):
     return(content)
     
 def getsearchtitle(title, year=None): ## new Add
+Refactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed.
+
     url = 'https://subscene.best/search?query=%s' % quote_plus(title)
     data = requests.get(url,headers=HDR,verify=false,allow_redirects=True).content
     data = data.decode('utf-8')
@@ -74,7 +76,8 @@ def getsearchtitle(title, year=None): ## new Add
     blocks = middle_part.split('class="title"')
     blocks.pop(0)
     list1 = []
-    for block in blocks:
+    
+for block in blocks:
         regx = '''<a href="(.*?)">(.*?)</a>'''
         try:
             matches = re.findall(regx, block)
@@ -83,21 +86,28 @@ def getsearchtitle(title, year=None): ## new Add
             print(("hrefxxx", href))
             print(("yearxx", year))
             href = 'https://subscene.best' + href
-            if year and year == '':
-              if "/subscene/" in href:
+            
+if year 
+and year == '':
+              
+if "/subscene/" in href:
                   return href
-            if not year:
-              if "/subscene/" in href:
+            
+if not year:
+              
+if "/subscene/" in href:
                   return href
-            if year and str(year) in name:
-                if "/subscene/" in href:
+            
+if year 
+and str(year) in name:
+                
+if "/subscene/" in href:
                    print(("href", href))
                    return href
-                   
-        except:
+                         
+except:
             break                             
     return 'https://subscene.best/search?query=' + quote_plus(title)
-
 def find_movie(content, title, year):
     url_found = None
     h = html_parser.HTMLParser()

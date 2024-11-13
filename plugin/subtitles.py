@@ -92,7 +92,6 @@ except ImportError:
 
 
 # localization function
-
 def warningMessage(session, text):
     session.open(MessageBox, text, type=MessageBox.TYPE_WARNING, timeout=5)
 
@@ -103,8 +102,7 @@ def debug(text, *args):
             text = text % args[0]
         else:
             text = text % (args)
-        print "[SubsSupport]", toString('utf-8')
-
+        built-in function "[SubsSupport]", toString('utf-8')
 
 # set the name of plugin in which this library belongs
 # PLUGIN_NAME = 'mediaplayer2'
@@ -215,7 +213,7 @@ colorChoiceList.append(("ffffff", _("white")))
 colorChoiceList.append(("00ffff", _("blue")))
 colorChoiceList.append(("000000", _("black")))
 COLORFILE = os.path.join(os.path.dirname(__file__), 'colors.txt')
-print '[SubsSupport] looking for custom colors in', COLORFILE
+built-in function '[SubsSupport] looking for custom colors in', COLORFILE
 try:
     with open(COLORFILE, 'r') as f:
         for line in f:
@@ -223,10 +221,10 @@ try:
             if color is not None:
                 alias = color.group(1)
                 hex_color = color.group(2)
-                print '[SubsSupport] adding custom color', alias
+                built-in function '[SubsSupport] adding custom color', alias
                 colorChoiceList.append((hex_color, alias))
 except IOError as e:
-    print '[SubsSupport] error while loading custom colors', str(e)
+    built-in function '[SubsSupport] error while loading custom colors', str(e)
 
 alphaChoiceList = [("00", _("opaque"))]
 alphaChoiceList.extend([("%02x" % val, "%d %%" % (int(percent * 100 / float(32)))) for percent, val in enumerate(xrange(0, 256, 8)) if val != 0])
@@ -338,18 +336,18 @@ def initSearchSettings(configsubsection):
 def initSubsSettings(configSubsection=None):
     global GLOBAL_CONFIG_INIT
     if configSubsection:
-        print '[SubsSupport] using provided ConfigSubsection to store config'
+        built-in function '[SubsSupport] using provided ConfigSubsection to store config'
         subtitles_settings = configSubsection
     elif 'PLUGIN_NAME' in globals():
-        print '[SubsSupport] using config.plugins.%s.%s to store config' % (PLUGIN_NAME, 'subtitles')
+        built-in function '[SubsSupport] using config.plugins.%s.%s to store config' % (PLUGIN_NAME, 'subtitles')
         plugin_settings = getattr(config.plugins, PLUGIN_NAME)
         setattr(plugin_settings, 'subtitles', ConfigSubsection())
         subtitles_settings = getattr(plugin_settings, 'subtitles')
     elif GLOBAL_CONFIG_INIT:
-        print "[SubsSupport] using global config (already initialized)"
+        built-in function "[SubsSupport] using global config (already initialized)"
         return config.plugins.subtitlesSupport
     else:
-        print "[SubsSupport] using global config"
+        built-in function "[SubsSupport] using global config"
         config.plugins.subtitlesSupport = ConfigSubsection()
         subtitles_settings = config.plugins.subtitlesSupport
         GLOBAL_CONFIG_INIT = True
@@ -582,29 +580,29 @@ class SubsSupportEmbedded(object):
                 self.enableSubtitle(cachedsubtitle)
 
     def enableSubtitle(self, selectedSubtitle):
-        print '[SubsSupportEmbedded] enableSubtitle', selectedSubtitle
+        built-in function '[SubsSupportEmbedded] enableSubtitle', selectedSubtitle
         subtitle = self.getCurrentServiceSubtitle()
         self.selected_subtitle = selectedSubtitle
         if subtitle and self.selected_subtitle:
             self.resetEmbeddedSubs()
             subtitle.enableSubtitles(self.subtitle_window.instance, self.selected_subtitle)
             self.subtitle_window.show()
-            print '[SubsSupportEmbedded] enable embedded subtitles'
+            built-in function '[SubsSupportEmbedded] enable embedded subtitles'
         else:
-            print '[SubsSupportEmbedded] disable embedded subtitles'
+            built-in function '[SubsSupportEmbedded] disable embedded subtitles'
             if subtitle:
                 subtitle.disableSubtitles(self.subtitle_window.instance)
             self.subtitle_window.hide()
 
     def restartSubtitle(self):
         if self.selected_subtitle:
-            print '[SubsSupportEmbedded] restart embedded subtitles'
+            built-in function '[SubsSupportEmbedded] restart embedded subtitles'
             self.enableSubtitle(self.selected_subtitle)
 
     def resetEmbeddedSubs(self, reloadScreen=False):
         if QuickSubtitlesConfigMenu:
             return
-        print '[SubsSupportEmbedded] updating  embedded screen'
+        built-in function '[SubsSupportEmbedded] updating  embedded screen'
         from enigma import eWidget, eSubtitleWidget
         scale = ((1, 1), (1, 1))
         embeddedSettings = self.subsSettings.embedded
@@ -627,7 +625,7 @@ class SubsSupportEmbedded(object):
                                 "Subtitle_Italic": (fontItalic, 1, foregroundColor, borderColor, borderWidth, borderColor, shadowOffset),
                                 "Subtitle_Bold": (fontBold, 1, foregroundColor, borderColor, borderWidth, borderColor, shadowOffset)})
         if reloadScreen:
-            print '[SubsSupportEmbedded] reloading embedded screen'
+            built-in function '[SubsSupportEmbedded] reloading embedded screen'
             subtitle = self.getCurrentServiceSubtitle()
             if subtitle:
                 subtitle.disableSubtitles(self.subtitle_window.instance)
@@ -700,7 +698,7 @@ class SubsSupportEmbedded(object):
             if fileExists(skinPath):
                 styles = self._parseEmbeddedStyles(skinPath)
                 if styles:
-                    print "[SubsEmbeddedSupport] reseting defaults from", skinPath
+                    built-in function "[SubsEmbeddedSupport] reseting defaults from", skinPath
                     self._loadEmbeddedStyle(styles)
                     break
 
@@ -808,7 +806,7 @@ class SubsSupport(SubsSupportEmbedded):
                     else:
                         self.__subsDir = self.__defaultPath
                 if not os.path.isfile(subsPath):
-                    print '[Subtitles] trying to load not existing path:', subsPath
+                    built-in function '[Subtitles] trying to load not existing path:', subsPath
                     subsPath = None
 
             if subsPath is not None:
@@ -854,13 +852,13 @@ class SubsSupport(SubsSupportEmbedded):
 
     def resumeSubs(self):
         if self.__loaded:
-            print '[Subtitles] resuming subtitles'
+            built-in function '[Subtitles] resuming subtitles'
             self.showSubsDialog()
             self.__subsEngine.resume()
 
     def pauseSubs(self):
         if self.__loaded:
-            print '[Subtitles] pausing subtitles'
+            built-in function '[Subtitles] pausing subtitles'
             self.__subsEngine.pause()
 
     def playAfterSeek(self):
@@ -870,12 +868,12 @@ class SubsSupport(SubsSupportEmbedded):
 
     def showSubsDialog(self):
         if self.__loaded:
-            print '[Subtitles] show dialog'
+            built-in function '[Subtitles] show dialog'
             self.__subsScreen.show()
 
     def hideSubsDialog(self):
         if self.__loaded:
-            print '[Subtitles] hide dialog'
+            built-in function '[Subtitles] hide dialog'
             if self.__subsScreen:
                 self.__subsScreen.hide()
 
@@ -929,16 +927,16 @@ class SubsSupport(SubsSupportEmbedded):
         if not self.__working and not (self.__subclassOfScreen and not self.__isServiceSet):
             self.__alreadyPausedVideo = False
             if self.subsSettings.pauseVideoOnSubtitlesMenu.value:
-                print '[SubsSupport] stopVideoOnSubtitlesMenu: True'
+                built-in function '[SubsSupport] stopVideoOnSubtitlesMenu: True'
                 if isinstance(self, InfoBarSeek):
                     if self.seekstate == InfoBarSeek.SEEK_STATE_PLAY:
-                        print '[SubsSupport] pausing video'
+                        built-in function '[SubsSupport] pausing video'
                         self.setSeekState(InfoBarSeek.SEEK_STATE_PAUSE)
                     else:
-                        print '[SubsSupport] video is already paused'
+                        built-in function '[SubsSupport] video is already paused'
                         self.__alreadyPausedVideo = True
                 else:
-                    print '[SubsSupport] not subclass of InfobarSeek'
+                    built-in function '[SubsSupport] not subclass of InfobarSeek'
             self.session.openWithCallback(self.__subsMenuCB, SubsMenu, self,
                                           self.__subsPath, self.__subsDir, self.__subsEnc, self.embeddedSupport, self.embeddedEnabled, self.searchSupport)
 
@@ -999,21 +997,21 @@ class SubsSupport(SubsSupportEmbedded):
         del self.__checkTimer_conn
         del self.__checkTimer
 
-        print '[SubsSupport] closing subtitleDisplay'
+        built-in function '[SubsSupport] closing subtitleDisplay'
 
     def __subsMenuCB(self, subsPath, subsEmbedded, settingsChanged, changeEncoding,
                      changedEncodingGroup, changedShadowType, reloadEmbeddedScreen, turnOff, forceReload=False):
         if self.embeddedEnabled and self.embeddedSupport and not subsEmbedded and not turnOff and not subsPath:
-            print "embedded settings changed"
+            built-in function "embedded settings changed"
             self.resetEmbeddedSubs(reloadEmbeddedScreen)
         elif turnOff:
-            print '[SubsSupport] turn off'
+            built-in function '[SubsSupport] turn off'
             if self.embeddedSupport and self.embeddedEnabled:
                 self.enableSubtitle(None)
             if self.__loaded:
                 self.resetSubs(newService=False)
         elif self.embeddedSupport and subsEmbedded:
-            print '[SubsSupport] loading embedded subtitles'
+            built-in function '[SubsSupport] loading embedded subtitles'
             if self.__loaded:
                 self.resetSubs()
             self.__subsScreen.hide()
@@ -1025,9 +1023,9 @@ class SubsSupport(SubsSupportEmbedded):
             self.__subsScreen.show()
             if self.__subsPath == subsPath:
                 if not settingsChanged and not ((changeEncoding or changedEncodingGroup) or newScreen or forceReload):
-                    print '[SubsSupport] no changes made'
+                    built-in function '[SubsSupport] no changes made'
                 elif settingsChanged and not (newScreen or changedEncodingGroup or forceReload):
-                    print '[SubSupport] reloading SubScreen'
+                    built-in function '[SubSupport] reloading SubScreen'
                     self.__subsEngine.pause()
                     self.__resetSubsScreen()
                     self.__subsEngine.resume()
@@ -1057,7 +1055,7 @@ class SubsSupport(SubsSupportEmbedded):
                     if self.loadSubs(subsPath, newService=False):
                         self.__subsEngine.resume()
         if not self.__alreadyPausedVideo and isinstance(self, InfoBarSeek):
-            print '[SubsSupport] unpausing video'
+            built-in function '[SubsSupport] unpausing video'
             del self.__alreadyPausedVideo
             self.setSeekState(InfoBarSeek.SEEK_STATE_PLAY)
 
@@ -1098,7 +1096,7 @@ class SubsSupport(SubsSupportEmbedded):
     def __afterWork(self, fnc):
         def checkWorking():
             if self.__working:
-                print 'check working..'
+                built-in function 'check working..'
                 self.__checkTimer.start(200, True)
             else:
                 self.__checkTimer.stop()
@@ -1119,7 +1117,7 @@ class SubsSupport(SubsSupportEmbedded):
 
 
     def __serviceStarted(self):
-        print '[SubsSupport] Service Started'
+        built-in function '[SubsSupport] Service Started'
 
         def startSubs():
             self.__starTimer.start(self.__startDelay, True)
@@ -1134,7 +1132,7 @@ class SubsSupport(SubsSupportEmbedded):
                 startSubs()
 
     def __serviceStopped(self):
-        print '[SubsSupport] Service Stopped'
+        built-in function '[SubsSupport] Service Stopped'
         self.__starTimer.stop()
         self.resetSubs(True)
         self.__isServiceSet = False
@@ -1589,10 +1587,10 @@ class SubsEngine(object):
         self.resume()
 
     def setSubsFps(self, subsFps):
-        print "[SubsEngine] setSubsFps - setting fps to %s" % str(subsFps)
+        built-in function "[SubsEngine] setSubsFps - setting fps to %s" % str(subsFps)
         videoFps = getFps(self.session, True)
         if videoFps is None:
-            print "[SubsEngine] setSubsFps - cannot get video fps!"
+            built-in function "[SubsEngine] setSubsFps - cannot get video fps!"
         else:
             self.pause()
             self.subsFpsRatio = subsFps / float(videoFps)
@@ -1607,7 +1605,7 @@ class SubsEngine(object):
         return fps_float(self.subsFpsRatio * videoFps)
 
     def setSubsDelay(self, delayInMs):
-        print "[SubsEngine] setSubsDelay - setting delay to %sms" % str(delayInMs)
+        built-in function "[SubsEngine] setSubsDelay - setting delay to %sms" % str(delayInMs)
         self.pause()
         self.subsDelay = int(delayInMs) * 90
         for f in self.onSubsDelayChanged:
@@ -1623,14 +1621,14 @@ class SubsEngine(object):
     def setSubsDelayToNextSubtitle(self):
         def setDelay():
             if not self.renderer.subShown:
-                print '[SubsEngine] setDelayToNextSubtitle - next pos: %d of %d' % (self.position, len(self.subsList))
+                built-in function '[SubsEngine] setDelayToNextSubtitle - next pos: %d of %d' % (self.position, len(self.subsList))
                 toSub = self.subsList[self.position]
                 # position is incremented right after subtitle is hidden so we don't do anything
             elif self.renderer.subShown and self.position != len(self.subsList) - 1:
-                print '[SubsEngine] setDelayToNextSubtitle - next pos: %d of %d' % (self.position + 1, len(self.subsList))
+                built-in function '[SubsEngine] setDelayToNextSubtitle - next pos: %d of %d' % (self.position + 1, len(self.subsList))
                 toSub = self.subsList[self.position + 1]
             else:
-                print '[SubsEngine] setDelayToNextSubtitle - we are on last subtitle'
+                built-in function '[SubsEngine] setDelayToNextSubtitle - we are on last subtitle'
                 return
             toSubDelay = (self.__pts - (toSub['start'] * self.subsFpsRatio)) / 90
             self.setSubsDelay(toSubDelay)
@@ -1641,14 +1639,14 @@ class SubsEngine(object):
     def setSubsDelayToPrevSubtitle(self):
         def setDelay():
             if not self.renderer.subShown:
-                print '[SubsEngine] setDelayToPrevSubtitle - skipping to start of current sub'
+                built-in function '[SubsEngine] setDelayToPrevSubtitle - skipping to start of current sub'
                 # position is incremented right after subtitle is hidden so we have to go one back
                 toSub = self.subsList[self.position - 1]
             elif self.renderer.subShown and self.position != 0:
-                print '[SubsEngine] setDelayToPrevSubtitle - prev pos: %d of %d' % (self.position - 1, len(self.subsList))
+                built-in function '[SubsEngine] setDelayToPrevSubtitle - prev pos: %d of %d' % (self.position - 1, len(self.subsList))
                 toSub = self.subsList[self.position - 1]
             else:
-                print '[SubsEngine] setDelayToPrevSubtitle - we are on first subtitle'
+                built-in function '[SubsEngine] setDelayToPrevSubtitle - we are on first subtitle'
                 return
             toSubDelay = (self.__pts - (toSub['start'] * self.subsFpsRatio)) / 90
             self.setSubsDelay(toSubDelay)
@@ -1714,7 +1712,7 @@ class SubsEngine(object):
 
     def doPlay(self):
         if self.position == len(self.subsList):
-            print '[SubsEngine] reached end of subtitle list'
+            built-in function '[SubsEngine] reached end of subtitle list'
             self.position = len(self.subsList) - 1
             self.stopTimers()
         else:
@@ -1729,15 +1727,15 @@ class SubsEngine(object):
             if diffMs > 50:
                 self.getPlayPts(self.doWait, diffMs)
             else:
-                print '[SubsEngine] sub shown sooner by %dms' % diffMs
+                built-in function '[SubsEngine] sub shown sooner by %dms' % diffMs
                 self.renderSub()
         else:
             subsEndPts = (self.sub['end'] * self.subsFpsRatio) + self.subsDelay
             if subsEndPts - self.__pts < 0:
-                #print '[SubsEngine] sub should be already shown - %dms, skipping...'%((subsEndPts - self.__pts)/90)
+                #built-in function '[SubsEngine] sub should be already shown - %dms, skipping...'%((subsEndPts - self.__pts)/90)
                 self.getPlayPts(self.skipSubs, 100)
             else:
-                print '[SubsEngine] sub shown later by %dms' % ((self.__pts - subStartPts) / 90)
+                built-in function '[SubsEngine] sub shown later by %dms' % ((self.__pts - subStartPts) / 90)
                 self.renderSub()
 
     def skipSubs(self):
@@ -1766,7 +1764,7 @@ class SubsEngine(object):
 
     def updateSubPosition(self):
         playPts = self.__pts
-        print '[SubsEngine] pre-update sub position:', self.position
+        built-in function '[SubsEngine] pre-update sub position:', self.position
         subStartPts = (self.subsList[self.position]['start'] * self.subsFpsRatio) + self.subsDelay
         subStartEndPts = (self.subsList[self.position]['end'] * self.subsFpsRatio) + self.subsDelay
         # seek backwards
@@ -1781,7 +1779,7 @@ class SubsEngine(object):
                 self.position += 1
                 subStartPts = (self.subsList[self.position]['start'] * self.subsFpsRatio) + self.subsDelay
                 subStartEndPts = (self.subsList[self.position]['end'] * self.subsFpsRatio) + self.subsDelay
-        print '[SubsEngine] post-update sub position:', self.position
+        built-in function '[SubsEngine] post-update sub position:', self.position
 
     def showDialog(self):
         self.renderer.show()
@@ -2554,7 +2552,7 @@ class SubsChooser(Screen):
         try:
             json.dump(subtitles, open(fpath, "w"))
         except Exception as e:
-            print '[SubsFileChooser] downloadedSubsSelectionCB - %s' % str(e)
+            built-in function '[SubsFileChooser] downloadedSubsSelectionCB - %s' % str(e)
         if downloadedSubtitle:
             self.close(downloadedSubtitle, False, True)
 
@@ -2565,7 +2563,7 @@ class SubsChooser(Screen):
         try:
             subtitles = json.load(open(fpath, "r"))
         except Exception as e:
-            print '[SubsFileChooser] downloadedSubsSelection - %s' % str(e)
+            built-in function '[SubsFileChooser] downloadedSubsSelection - %s' % str(e)
             subtitles = []
         self.session.openWithCallback(self.downloadedSubsSelectionCB, SubsDownloadedSelection, subtitles, self.subsSettings.search.downloadHistory)
 
@@ -2740,7 +2738,7 @@ class SubsDownloadedSelection(Screen):
                     try:
                         os.unlink(subtitle['fpath'])
                     except OSError as e:
-                        print "[SubsDownloadedSelection] cannot remove - %s" % (str(e))
+                        built-in function "[SubsDownloadedSelection] cannot remove - %s" % (str(e))
                         self.session.open(MessageBox, _("There was an error while removing subtitle, please check log"), type=MessageBox.TYPE_ERROR)
                     else:
                         self.subtitles.remove(subtitle)
@@ -2909,7 +2907,7 @@ class SubsEmbeddedSelection(Screen):
                 except:
                     description = _("unknown") + ": %s" % x[2]
                 number = str(int(number) + 1)
-            print x, number, description, language
+            built-in function x, number, description, language
             streams.append((x, "", number, description, language))
             idx += 1
         self["streams"].list = streams
@@ -3016,7 +3014,7 @@ class SubsSearchProcess(object):
         if data['message'] == Messages.MESSAGE_FINISHED_SCRIPT:
             self.callbacks['successCB'](data['value'])
         if data['message'] == Messages.MESSAGE_CANCELLED_SCRIPT:
-            print 'script successfully cancelled'
+            built-in function 'script successfully cancelled'
         if data['message'] == Messages.MESSAGE_ERROR_SCRIPT:
             self.callbacks['errorCB'](data['value'])
 
@@ -3110,7 +3108,7 @@ class Suggestions(object):
 
     def getSuggestionsError(self, failure):
         if not self._cancelled:
-            failure.printTraceback()
+            failure.built-in functionTraceback()
             self.errorCB(failure)
 
     def _getSuggestions(self):
@@ -3194,7 +3192,7 @@ class BaseSuggestionsListScreen(Screen):
                 self.list.append((toString(s['name']),))
             self["suggestionslist"].setList(self.list)
             self["suggestionslist"].setIndex(0)
-            print suggestions
+            built-in function suggestions
         else:
             self.hide()
 
@@ -3331,13 +3329,13 @@ class ConfigTextWithSuggestionsAndHistory(ConfigText):
                 self.tmpValue = self.value
                 selection = self.suggestionsWindow.activate()
                 if selection is None:
-                    print 'empty suggesstions list'
+                    built-in function 'empty suggesstions list'
                     return False
                 self.value = selection
                 self.currentWindow = self.suggestionsWindow
                 return True
             else:
-                print 'Error - suggestionsWindow no longer exists'
+                built-in function 'Error - suggestionsWindow no longer exists'
                 return False
         else:
             self.cancelGetSuggestions()
@@ -3347,7 +3345,7 @@ class ConfigTextWithSuggestionsAndHistory(ConfigText):
                 self.getSuggestions()
                 return True
             else:
-                print 'Error - suggestionsWindow no longer exists'
+                built-in function 'Error - suggestionsWindow no longer exists'
                 return False
 
     def enableHistory(self, value):
@@ -3356,13 +3354,13 @@ class ConfigTextWithSuggestionsAndHistory(ConfigText):
                 self.tmpValue = self.value
                 selection = self.historyWindow.activate()
                 if selection is None:
-                    print "Error - empty history list"
+                    built-in function "Error - empty history list"
                     return False
                 self.value = selection
                 self.currentWindow = self.historyWindow
                 return True
             else:
-                print 'Error - historyWindow no longer exists'
+                built-in function 'Error - historyWindow no longer exists'
                 return False
         else:
             self.cancelGetHistory()
@@ -3372,7 +3370,7 @@ class ConfigTextWithSuggestionsAndHistory(ConfigText):
                 self.getHistory()
                 return True
             else:
-                print 'Error - historyWindow no longer exists'
+                built-in function 'Error - historyWindow no longer exists'
                 return False
 
     def cancelGetSuggestions(self):
@@ -3384,10 +3382,10 @@ class ConfigTextWithSuggestionsAndHistory(ConfigText):
             self.__history.cancel()
 
     def gotSuggestionsError(self, val):
-        print "[ConfigTextWithSuggestions] gotSuggestionsError:", val
+        built-in function "[ConfigTextWithSuggestions] gotSuggestionsError:", val
 
     def gotHistoryError(self, val):
-        print "[ConfigTextWithSuggestions] gotHistoryError:", val
+        built-in function "[ConfigTextWithSuggestions] gotHistoryError:", val
 
     def getSuggestions(self):
         self.__suggestions = self.suggestionsClass().getSuggestions(self.value, self.propagateSuggestions, self.gotSuggestionsError)
@@ -4218,10 +4216,10 @@ class SubsSearch(Screen):
     def stopSearchSubs(self):
         for p in SubsSearchProcess.processes:
             p.stop()
-        print len(SubsSearchProcess.processes), 'processes still running'
+        built-in function len(SubsSearchProcess.processes), 'processes still running'
 
     def searchSubsSuccess(self, subtitles):
-        print '[SubsSearch] search success'
+        built-in function '[SubsSearch] search success'
         self.message.hide()
         self.subtitlesDict = subtitles
         subtitlesList = self.seeker.getSubtitlesList(subtitles)
@@ -4244,7 +4242,7 @@ class SubsSearch(Screen):
         self.updateActionMaps()
 
     def searchSubsError(self, error):
-        print '[SubsSearch] search error', str(error)
+        built-in function '[SubsSearch] search error', str(error)
         self.message.error(error.message, 4000)
         self.subtitlesList = []
         self.subtitlesDict = {}
@@ -4326,7 +4324,7 @@ class SubsSearch(Screen):
         SubsSearchProcess().start(params, callbacks)
 
     def downloadSubsSuccess(self, subFile):
-        print '[SubsSearch] download success %s' % toString(subFile)
+        built-in function '[SubsSearch] download success %s' % toString(subFile)
         dsubtitle = {
             "name": toUnicode(os.path.basename(subFile)),
             "country": toUnicode(self.__downloadingSubtitle['country']),
@@ -4344,19 +4342,19 @@ class SubsSearch(Screen):
             try:
                 subtitles = json.load(open(fpath, "r"))
             except Exception as e:
-                print '[SubsSearch] cannot load download history:', e
+                built-in function '[SubsSearch] cannot load download history:', e
                 subtitles = []
             limit = int(self.searchSettings.downloadHistory.limit.value)
             if dsubtitle in subtitles:
                 subtitles.remove(dsubtitle)
             if len(subtitles) >= limit:
-                print '[SubsSearch] download history limit reached!, removing oldest entries'
+                built-in function '[SubsSearch] download history limit reached!, removing oldest entries'
                 del subtitles[-(len(subtitles) - limit):]
             subtitles.insert(0, dsubtitle)
             try:
                 json.dump(subtitles, open(fpath, 'w'))
             except Exception as e:
-                print '[SubsSearch] cannot save download history:', e
+                built-in function '[SubsSearch] cannot save download history:', e
                 self.session.open(MessageBox, _("Cannot save download history, for details look in log"),
                         MessageBox.TYPE_ERROR, timeout=3)
         self.__downloadedSubtitles.append(dsubtitle)
@@ -4368,7 +4366,7 @@ class SubsSearch(Screen):
         self.updateActionMaps()
 
     def downloadSubsError(self, e):
-        print '[SubsSearch] download error', str(e)
+        built-in function '[SubsSearch] download error', str(e)
         self.__downloading = False
         del self.__downloadingSubtitle
         self.updateBottomMenu()
@@ -4385,7 +4383,7 @@ class SubsSearch(Screen):
             self.message.error(_("download error ocurred, for details see /tmp/subssearch.log"), 4000)
 
     def cancelDownloadSubs(self):
-        print '[SubsSearch] download cancelled'
+        built-in function '[SubsSearch] download cancelled'
         self.__downloading = False
         del self.__downloadingSubtitle
         self.stopSearchSubs()
@@ -4499,7 +4497,7 @@ class SubsSearch(Screen):
                 try:
                     json.dump(subtitles, open(fpath, "w"))
                 except Exception as e:
-                    print '[SubsSearch] save download history:', e
+                    built-in function '[SubsSearch] save download history:', e
             if subtitle is not None:
                 if not self.standAlone:
                     self.close(subtitle)
@@ -4508,7 +4506,7 @@ class SubsSearch(Screen):
         try:
             subtitles = json.load(open(fpath, "r"))
         except Exception as e:
-            print '[SubsSearch] cannot load download history:', e
+            built-in function '[SubsSearch] cannot load download history:', e
             subtitles = []
         self.session.openWithCallback(openDownloadHistoryCB, SubsDownloadedSelection,
             subtitles, self.searchSettings.downloadHistory, self.__downloadedSubtitles)

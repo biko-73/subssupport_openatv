@@ -201,7 +201,7 @@ class TitulkyClient(object):
             item['language_flag'] = "flags/%s.gif" % (lang2_opensubtitles(item['lang']))
 
             sync = False
-            if not item['sync'] == '' and file_original_path.find(item['sync']) > -1:
+            if ("!=") and file_original_path.find(item['sync']) > -1:
                 log(__name__, 'found sync : filename match')
                 sync = True
             if file_size == item['size']:

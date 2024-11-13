@@ -16,7 +16,6 @@
 #
 #################################################################################
 
-from __future__ import absolute_import
 import os
 import shutil
 import socket
@@ -25,47 +24,26 @@ import time
 import traceback
 import zipfile
 
-try:
-    from .seekers import SubtitlesDownloadError, SubtitlesSearchError, \
-        SubtitlesErrors, TitulkyComSeeker, EdnaSeeker, SerialZoneSeeker, ElsubtitleSeeker, IndexsubtitleSeeker, MoviesubtitlesSeeker, Moviesubtitles2Seeker, MySubsSeeker, \
-        OpenSubtitlesSeeker, OpenSubtitles2Seeker, PodnapisiSeeker, SubsceneSeeker, SubdlSeeker, SubsytsSeeker, SubtitlecatSeeker, SubtitlesGRSeeker, SubtitlesmoraSeeker, SubtitlistSeeker, \
-          ItasaSeeker, TitloviSeeker
-    from .seekers.seeker import BaseSeeker
-    from .seekers.utilities import languageTranslate, langToCountry, \
-        getCompressedFileType, detectSearchParams
-    from .utils import SimpleLogger, toString
-except (ValueError, ImportError):
-    from seekers import SubtitlesDownloadError, SubtitlesSearchError, \
-        SubtitlesErrors, TitulkyComSeeker, EdnaSeeker, SerialZoneSeeker, ElsubtitleSeeker, IndexsubtitleSeeker, MoviesubtitlesSeeker, Moviesubtitles2Seeker, MySubsSeeker, \
-        OpenSubtitlesSeeker, OpenSubtitles2Seeker, PodnapisiSeeker, SubsceneSeeker, SubdlSeeker, SubsytsSeeker, SubtitlecatSeeker, SubtitlesGRSeeker, SubtitlesmoraSeeker, SubtitlistSeeker, \
-         ItasaSeeker, TitloviSeeker
-    from seekers.seeker import BaseSeeker
-    from seekers.utilities import languageTranslate, langToCountry, \
-        getCompressedFileType, detectSearchParams
-    from utils import SimpleLogger, toString
-
-import six   
-        
+from seekers import SubtitlesDownloadError, SubtitlesSearchError, \
+    SubtitlesErrors, TitulkyComSeeker, NovalermoraSeeker, EdnaSeeker, SerialZoneSeeker, \
+    OpenSubtitlesSeeker, PodnapisiSeeker, SubscenebestSeeker, SubsourceSeeker, OpenSubtitlesMoraSeeker, SubtitlesGRSeeker, \
+    ItasaSeeker, TitloviSeeker
+from seekers.seeker import BaseSeeker
+from seekers.utilities import languageTranslate, langToCountry, \
+    getCompressedFileType, detectSearchParams
+from utils import SimpleLogger, toString
 
 SUBTITLES_SEEKERS = []
+SUBTITLES_SEEKERS.append(NovalermoraSeeker)
+SUBTITLES_SEEKERS.append(SubscenebestSeeker)
+SUBTITLES_SEEKERS.append(OpenSubtitlesMoraSeeker)
+SUBTITLES_SEEKERS.append(SubsourceSeeker)
 SUBTITLES_SEEKERS.append(TitulkyComSeeker)
 SUBTITLES_SEEKERS.append(EdnaSeeker)
 SUBTITLES_SEEKERS.append(SerialZoneSeeker)
-SUBTITLES_SEEKERS.append(ElsubtitleSeeker)
-SUBTITLES_SEEKERS.append(IndexsubtitleSeeker)
-SUBTITLES_SEEKERS.append(MoviesubtitlesSeeker)
-SUBTITLES_SEEKERS.append(Moviesubtitles2Seeker)
-SUBTITLES_SEEKERS.append(MySubsSeeker)
 SUBTITLES_SEEKERS.append(OpenSubtitlesSeeker)
-SUBTITLES_SEEKERS.append(OpenSubtitles2Seeker)
 SUBTITLES_SEEKERS.append(PodnapisiSeeker)
-SUBTITLES_SEEKERS.append(SubsceneSeeker)
-SUBTITLES_SEEKERS.append(SubdlSeeker)
-SUBTITLES_SEEKERS.append(SubsytsSeeker)
-SUBTITLES_SEEKERS.append(SubtitlecatSeeker)
 SUBTITLES_SEEKERS.append(SubtitlesGRSeeker)
-SUBTITLES_SEEKERS.append(SubtitlesmoraSeeker)
-SUBTITLES_SEEKERS.append(SubtitlistSeeker)
 SUBTITLES_SEEKERS.append(ItasaSeeker)
 SUBTITLES_SEEKERS.append(TitloviSeeker)
 
@@ -137,7 +115,7 @@ class SubsSeeker(object):
         lock = threading.Lock()
         if len(providers) == 1:
             provider = providers[0]
-            if isinstance(provider, str):
+            if isinstance(provider, basestring):
                 provider = self.getProvider(providers[0])
             if provider.error is not None:
                 self.log.debug("provider '%s' has 'error' flag set, skipping...", provider)
@@ -146,7 +124,7 @@ class SubsSeeker(object):
                 self._searchSubtitles(lock, subtitlesDict, updateCB, provider, title, filepath, langs, season, episode, tvshow, year)
         else:
             for provider in providers:
-                if isinstance(provider, str):
+                if isinstance(provider, basestring):
                     provider = self.getProvider(provider)
                 if provider.error is not None:
                     self.log.debug("provider '%s' has 'error' flag set, skipping...", provider)

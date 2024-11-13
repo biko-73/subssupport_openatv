@@ -93,7 +93,7 @@ def log(module, msg):
     _log(module, msg.encode('utf-8'))
 
 
-def geturl(url, headers=None, params=None):
+def geturl(url, headers=None):
     try:
         res = ses.get(url, headers=headers, verify=False, timeout=5)
         print('res.status_code', res.status_code)

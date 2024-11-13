@@ -156,7 +156,6 @@ class SerialZoneClient(object):
 		res = urllib.urlopen(show_url + "titulky/" + show_series + "-rada/")
 		if not res.getcode() == 200:
 			return []
-		subtitles = []
 		for html_episode in re.findall('<div .+? class=\"sub\-line .+?>(.+?)</div></div></div></div>', res.read(), re.IGNORECASE | re.DOTALL):
 			subtitle = {}
 			for html_subtitle in html_episode.split("<div class=\"sb1\">"):
@@ -183,4 +182,3 @@ class SerialZoneClient(object):
 					except:
 						subtitle_version['file_size'] = -1
 					subtitle['versions'].append(subtitle_version)
-			# print subtitle

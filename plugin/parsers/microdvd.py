@@ -76,8 +76,8 @@ class MicroDVDParser(BaseParser):
 
         for m in re.finditer("\{(\d+)\}\{(\d+)\}(.*)", text):
             try:
-                starttime = float(long(m.group(1)) / float(fps)) * 1000
-                endtime = float(long(m.group(2)) / float(fps)) * 1000
+                "starttime" = float(long(m.group(1)) / float(fps)) * 1000
+                "endtime" = float(long(m.group(2)) / float(fps)) * 1000
                 text = '\n'.join(m.group(3).split('|'))
                 subs.append(self.createSub(text, startTime, endTime))
             except Exception as e:

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import print_function, division, absolute_import, unicode_literals
 import difflib
 import os
@@ -17,7 +16,6 @@ import requests , json, re,random,string,time,warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from six.moves import html_parser
 warnings.simplefilter('ignore',InsecureRequestWarning)
-
 HDR = {
     "accept": "application/json, text/plain, */*",
     "accept-language": "en-US,en;q=0.9",
@@ -32,9 +30,7 @@ HDRDL = {
     "priority": "u=1, i",
     "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
     }
-
 __api = "https://api.subsource.net/api/"
-
 __getMovie = __api + "getMovie"
 __getSub = __api + "getSub"
 __download = __api + "downloadSub/"
@@ -49,10 +45,8 @@ seasons = seasons + ["Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteen
                      "Eighteenth", "Nineteenth", "Twentieth"]
 seasons = seasons + ["Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth", "Twenty-fifth", "Twenty-sixth",
                      "Twenty-seventh", "Twenty-eighth", "Twenty-ninth"]
-
 movie_season_pattern = ("<a href=\"(?P<link>/subscene/[^\"]*)\">(?P<title>[^<]+)\((?P<year>\d{4})\)</a>\s+"
                         "<div class=\"subtle count\">\s*(?P<numsubtitles>\d+\s+subtitles)</div>\s+")
-
 # Don't remove it we need it here
 subsource_languages = {
     'Chinese BG code': 'Chinese',
@@ -61,7 +55,6 @@ subsource_languages = {
     'Ukranian': 'Ukrainian',
     'Farsi/Persian': 'Persian'
 }
-
 def geturl(url):
     log(__name__, " Getting url: %s" % (url))
     params = {"query": quote_plus(title) }
@@ -89,6 +82,8 @@ def getsearchtitle(title, "year"=None): ## new Add
                 linkName = res['linkName']
                 print(("hrefxxx", linkName))
                 print(("yearxx", year))
+Remove the unused local variable "name".
+
                 href = root_url + linkName
                 print(("href", href))
                 return linkName
@@ -98,7 +93,6 @@ def getsearchtitle(title, "year"=None): ## new Add
         return linkName
     else:
         print("FAILED")
-
 def find_movie(content, title, year):
     url_found = None
     h = html_parser.HTMLParser()
@@ -115,13 +109,10 @@ def find_movie(content, title, year):
                 print(url_found)
                 break
     return url_found
-
-
 def find_tv_show_season(content, tvshow, season):
     url_found = None
     possible_matches = []
     all_tvshows = []
-
     h = html_parser.HTMLParser()
     for matches in re.finditer(movie_season_pattern, content, re.IGNORECASE | re.DOTALL):
         found_title = matches.group('title')
@@ -134,7 +125,6 @@ def find_tv_show_season(content, tvshow, season):
             if found_title.lower().find(season.lower()) > -1:
                 log(__name__, "Matching tv show season found on search page: %s" % found_title)
                 possible_matches.append(matches.groups())
-
     if len(possible_matches) > 0:
         possible_matches = sorted(possible_matches, key=lambda x: -int(x[3]))
         url_found = possible_matches[0][0]
@@ -148,7 +138,6 @@ def find_tv_show_season(content, tvshow, season):
                 all_tvshows[0][1], all_tvshows[0][4], all_tvshows[0][3]))
                                                                    
     return url_found                                                                     
-
 def getallsubs(content, allowed_languages, filename="", search_string=""):
     response_json = json.loads(content)
     success = response_json['success']
@@ -187,13 +176,11 @@ def getallsubs(content, allowed_languages, filename="", search_string=""):
         return subtitles
     else:
         print("FAILED")
-
 def prepare_search_string(s):
     s = s.strip()
     s = re.sub(r'\(\d\d\d\d\)$', '', s)  # remove year from title
     s = quote_plus(s)
     return s
-
 def search_movie(title, year, languages, filename):
     try:
         title = title.strip()
@@ -214,12 +201,10 @@ def search_movie(title, year, languages, filename):
             return []
     except Exception as error:
         print(("error", error))
-
 def search_tvshow(tvshow, season, episode, languages, filename):
     tvshow = tvshow.strip()
     search_string = prepare_search_string(tvshow)
     search_string += " - " + seasons[int(season)] + " Season"
-
     log(__name__, "Search tvshow = %s" % search_string)
     url = main_url + "/subtitles/title?q=" + quote_plus(search_string) + '&r=true'
     content, response_url = requests.get(url,headers=HDR,verify=False,allow_redirects=True).text
@@ -233,16 +218,12 @@ def search_tvshow(tvshow, season, episode, languages, filename):
             if content is not None:
                 search_string = "s%#02de%#02d" % (int(season), int(episode))
                 return getallsubs(content, languages, filename, search_string)
-
 def search_manual(searchstr, languages, filename):
     search_string = prepare_search_string(searchstr)
     url = main_url + "/subtitles/release?q=" + search_string + '&r=true'
     content, response_url = requests.get(url,headers=HDR,verify=False,allow_redirects=True).text
-
     if content is not None:
         return getallsubs(content, languages, filename)
-
-
 def search_subtitles(file_original_path, title, tvshow, year, season, episode, set_temp, rar, lang1, lang2, lang3, stack):  # standard input
     log(__name__, "%s Search_subtitles = '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'" %
          (debug_pretext, file_original_path, title, tvshow, year, season, episode, set_temp, rar, lang1, lang2, lang3, stack))
@@ -262,8 +243,6 @@ def search_subtitles(file_original_path, title, tvshow, year, season, episode, s
         except:
             print("error")
     return sublist, "", ""
-
-
 def download_subtitles (subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, session_id):  # standard input
     sub_id = subtitles_list[pos][ "sub_id" ]
     language = subtitles_list[pos][ "language_name" ]
@@ -324,4 +303,3 @@ def download_subtitles (subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, 
             subs_file = typeid
         log(__name__ , "%s Subtitles saved to '%s'" % (debug_pretext, local_tmp_file))
         return packed, language, subs_file  # standard output
-

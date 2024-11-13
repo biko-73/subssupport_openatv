@@ -32,8 +32,6 @@ s = requests.Session()
 main_url = "https://subscene.best"
 debug_pretext = ""
 ses = requests.Session()
-# Seasons as strings for searching  </div>
-# Seasons as strings for searching
 seasons = ["Specials", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth"]
 seasons = seasons + ["Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth",
                      "Eighteenth", "Nineteenth", "Twentieth"]
@@ -63,10 +61,9 @@ def geturl(url):
         content = None
     return(content)
     
-def getSearchTitle(title, year=None): ## new Add
+def getsearchtitle(title, year=None): ## new Add
     url = 'https://subscene.best/search?query=%s' % quote_plus(title)
-    #data = geturl(url)
-    data = requests.get(url,headers=HDR,verify=False,allow_redirects=True).content
+    data = requests.get(url,headers=HDR,verify=false,allow_redirects=True).content
     data = data.decode('utf-8')
     div1 = data.split('<footer>')
     div1.pop(1)
@@ -97,7 +94,6 @@ def getSearchTitle(title, year=None): ## new Add
                    print(("href", href))
                    return href
                    
-
         except:
             break                             
     return 'https://subscene.best/search?query=' + quote_plus(title)
@@ -128,7 +124,6 @@ def find_tv_show_season(content, tvshow, season):
     season_pattern = "<a href=\"(?P<link>/subscene/[^\"]*)\">(?P<title>[^<]+)</a>\s*"
     for matches in re.finditer(season_pattern, content, re.IGNORECASE | re.DOTALL):
         found_title = matches.group('title')
-        #found_title = html.unescape(found_title)
         print(("found_title2", found_title)) 
         log(__name__, "Found tv show season on search page: %s" % found_title)
         url_found = matches.group('link')
@@ -142,8 +137,6 @@ def getallsubs(content, allowed_languages, filename="", search_string=""):
     i = 0
     subtitles = []
     for movie in movies:
-        #numfiles = 1
-        #numfiles = movie.find('td', class_="a3").get_text(strip=True)
         movielink = movie.find('td', class_="a1").a.get("href")
         languagefound = movie.find('td', class_="a1").a.div.span.get_text(strip=True)
         language_info = get_language_info(languagefound)
@@ -164,17 +157,12 @@ def getallsubs(content, allowed_languages, filename="", search_string=""):
                     subtitles.append({'filename': subtitle_name, 'sync': sync, 'link': link,
                                      'language_name': language_info['name'], 'lang': language_info})
                     i = i + 1
-                #elif numfiles > 2:
-                    #subtitle_name = subtitle_name + ' ' + ("%d files" % int(matches.group('numfiles')))
-                    #subtitles.append({'rating': rating, 'filename': subtitle_name, 'sync': sync, 'link': link, 'language_name': language_info['name'], 'lang': language_info, 'comment': comment})
-                #i = i + 1
             else:
                 subtitles.append({'filename': subtitle_name, 'sync': sync, 'link': link, 'language_name': language_info['name'], 'lang': language_info})
                 i = i + 1
 
     subtitles.sort(key=lambda x: [not x['sync']])
     return subtitles
-
 
 def prepare_search_string(s):
     s = s.strip()
@@ -191,10 +179,7 @@ def search_movie(title, year, languages, filename):
         url = getSearchTitle(title, year)#.replace("%2B"," ")
         print(("true url", url))
         content = requests.get(url,headers=HDR,verify=False,allow_redirects=True)
-        #print("true url", url)
-        #content = geturl(url)
         print(("title", title))
-        #print("content", content)
         if content != '':
             _list = getallsubs(content, languages, filename)
             print(("_list", _list))
@@ -204,12 +189,9 @@ def search_movie(title, year, languages, filename):
     except Exception as error:
         print(("error", error))
 
-
 def search_tvshow(tvshow, season, episode, languages, filename):
     tvshow = tvshow.strip()
-    #print(("tvshow", tvshow))
     search_string = prepare_search_string(tvshow)
-    #print(("search_string", search_string))
     search_string = search_string.replace("+"," ")
     print(("search_string", search_string))
     search_string += " - " + seasons[int(season)] + " Season"
@@ -233,7 +215,6 @@ def search_tvshow(tvshow, season, episode, languages, filename):
                 print(("search_string", search_string))
                 return getallsubs(content, languages, filename)
 
-
 def search_manual(searchstr, languages, filename):
     search_string = prepare_search_string(searchstr)
     url = main_url + "/subtitles/release?q=" + search_string + '&r=true'
@@ -241,7 +222,6 @@ def search_manual(searchstr, languages, filename):
 
     if content is not None:
         return getallsubs(content, languages, filename)
-
 
 def search_subtitles(file_original_path, title, tvshow, year, season, episode, set_temp, rar, lang1, lang2, lang3, stack):  # standard input
     log(__name__, "%s Search_subtitles = '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'" %
@@ -268,14 +248,8 @@ def download_subtitles (subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, 
     url = subtitles_list[pos][ "link" ]
     language = subtitles_list[pos][ "language_name" ]
     content = requests.get(url,headers=HDR,verify=False,allow_redirects=True).text
-    #content = requests.get(url,headers=HDR,verify=False,allow_redirects=True)
     downloadlink_pattern = '<!--<span><a class="button"\s+href="(.+)">'
     match = re.compile(downloadlink_pattern).findall(content)
-    #downloadlink = main_url + download_block
-    #print(("downloadlink", url))
-    #content = geturl(url)
-    #downloadlink_pattern = "<a class=\"button\"  href=\"(?P<match>/download/\d+)"
-    #match = re.compile(downloadlink_pattern).findall(content)
     if match:
         downloadlink = match[0]
         print(("downloadlink", downloadlink))
@@ -288,13 +262,7 @@ def download_subtitles (subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, 
         typeid = "zip"
         filmid = 0
         postparams = { '__EVENTTARGET': 's$lc$bcr$downloadLink', '__EVENTARGUMENT': '' , '__VIEWSTATE': viewstate, '__PREVIOUSPAGE': previouspage, 'subtitleId': subtitleid, 'typeId': typeid, 'filmId': filmid}
-        #postparams = urllib3.request.urlencode({ '__EVENTTARGET': 's$lc$bcr$downloadLink', '__EVENTARGUMENT': '' , '__VIEWSTATE': viewstate, '__PREVIOUSPAGE': previouspage, 'subtitleId': subtitleid, 'typeId': typeid, 'filmId': filmid})
-        #class MyOpener(urllib.FancyURLopener):
-            #version = 'User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:109.0) Gecko/20100101 Firefox/115.0'
-        #my_urlopener = MyOpener()
-        #my_urlopener.addheader('Referer', url)
         log(__name__ , "%s Fetching subtitles using url '%s' with referer header '%s' and post parameters '%s'" % (debug_pretext, downloadlink, url, postparams))
-        #response = my_urlopener.open(downloadlink, postparams)
         response = requests.get(downloadlink,data=postparams,headers=HDR,verify=False,allow_redirects=True) 
         local_tmp_file = zip_subs
         try:
@@ -304,7 +272,6 @@ def download_subtitles (subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, 
             local_file_handle = open(local_tmp_file, 'wb')
             local_file_handle.write(response.content)
             local_file_handle.close()
-            # Check archive type (rar/zip/else) through the file header (rar=Rar!, zip=PK) urllib3.request.urlencode
             myfile = open(local_tmp_file, "rb")
             myfile.seek(0)
             if (myfile.read(1).decode('utf-8') == 'R'):

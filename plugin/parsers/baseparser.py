@@ -1,3 +1,4 @@
+import re
 class ParseError(Exception):
     pass
 
@@ -48,10 +49,10 @@ class BaseParser(object):
         @param end: end time of subtitle in ms
 
         """
-        duration = int(end - start)
+        duration = long(end - start)
         # convert to pts
-        start = int(start * 90)
-        end = int(end * 90)
+        start = long(start * 90)
+        end = long(end * 90)
         if self.rowParse:
             rows = []
             style = newStyle = 'regular'
@@ -76,6 +77,7 @@ class BaseParser(object):
         """
         text = text.strip()
         text = text.replace('\x00', '')
+        text = re.sub(u'[\u064e\u064f\u0650\u0651\u0652\u064c\u064b\u064d\u0640\ufc62]','',text)
         sublist = self._parse(text, fps)
         if len(sublist) <= 1:
             raise NoSubtitlesParseError()

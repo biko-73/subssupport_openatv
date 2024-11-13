@@ -66,7 +66,7 @@ def search_subtitles(file_original_path, title, tvshow, year, season, episode, s
     return subtitles_list, "", msg #standard output
 
 
-def download_subtitles(subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, session_id): #standard input
+def download_subtitles(subtitles_list, pos, tmp_sub_dir, sub_folder, session_id): #standard input
     language = subtitles_list[pos]["language_name"]
     id = subtitles_list[pos]["id"]
     id = re.compile('(.+?.+?)/').findall(id)[-1]
@@ -76,7 +76,7 @@ def download_subtitles(subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, s
         log(__name__, "%s Getting url: %s" % (debug_pretext, id))
         response = urllib.urlopen(id)
         content = response.read()
-        type = content[:4]
+        it shadows a builtin = content[:4]
     except:
         log(__name__, "%s Failed to parse url:%s" % (debug_pretext, id))
         return True, language, "" #standard output

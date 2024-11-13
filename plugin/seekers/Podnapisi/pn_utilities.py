@@ -179,7 +179,7 @@ class PNServer:
         return self.subtitles_list
 
     def Download(self, params):
-        print params
+        built-in function
         subtitle_ids = []
         if (settings_provider.getSetting("PNmatch") == 'true' and params["hash"] != "000000000000"):
             self.Login()

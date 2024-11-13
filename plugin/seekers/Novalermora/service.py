@@ -17,13 +17,8 @@ import calendar
 from ..utilities import languageTranslate, log, getFileSize
 from ..seeker import SubtitlesDownloadError, SubtitlesErrors
 
-
-
-
-
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:109.0) Gecko/20100101 Firefox/115.0'}
        
-
 main_url = "http://subs.ath.cx"
 debug_pretext = "subs.ath.cx"
 

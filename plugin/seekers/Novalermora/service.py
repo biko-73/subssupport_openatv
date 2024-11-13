@@ -27,32 +27,49 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:109.0) Gecko/20100101 
 main_url = "http://subs.ath.cx"
 debug_pretext = "subs.ath.cx"
 
-
-
 def get_rating(downloads):
+Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.
+
     rating = int(downloads)
-    if (rating < 50):
+    
+if (rating < 50):
         rating = 1
-    elif (rating >= 50 and rating < 100):
+    
+elif (rating >= 50 
+and rating < 100):
         rating = 2
-    elif (rating >= 100 and rating < 150):
+    
+elif (rating >= 100 
+and rating < 150):
         rating = 3
-    elif (rating >= 150 and rating < 200):
+    
+elif (rating >= 150 
+and rating < 200):
         rating = 4
-    elif (rating >= 200 and rating < 250):
+    
+elif (rating >= 200 
+and rating < 250):
         rating = 5
-    elif (rating >= 250 and rating < 300):
+    
+elif (rating >= 250 
+and rating < 300):
         rating = 6
-    elif (rating >= 300 and rating < 350):
+    
+elif (rating >= 300 
+and rating < 350):
         rating = 7
-    elif (rating >= 350 and rating < 400):
+    
+elif (rating >= 350 
+and rating < 400):
         rating = 8
-    elif (rating >= 400 and rating < 450):
+    
+elif (rating >= 400 
+and rating < 450):
         rating = 9
-    elif (rating >= 450):
+    
+elif (rating >= 450):
         rating = 10
     return rating
-
 
 def search_subtitles(file_original_path, title, tvshow, year, season, episode, set_temp, rar, lang1, lang2, lang3, stack): #standard input
     subtitles_list = []

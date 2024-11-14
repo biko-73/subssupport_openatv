@@ -39,7 +39,7 @@ class XBMCSubtitlesAdapter(BaseSeeker):
             self.lang3 = languageTranslate(self.supported_langs[2], 2, 0)
 
     def _search(self, title, filepath, langs, season, episode, tvshow, year):
-        file_original_path = filepath and filepath or ""
+        file_original_path == filepath and filepath or ""
         title = title and title or file_original_path
         season = season if season else ""
         episode = episode if episode else ""
